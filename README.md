@@ -43,9 +43,10 @@ There are two options provided for the second stage a.k.a. the Linux bootloader:
 
 ### Automatic Install
 
-Make sure you have `make`, `nasm` and `dd`. Run this command to install:
+Make sure you have `make`, `nasm`, `dd` and root access. Run this command to
+install:
 ```bash
-make DEST=/dev/sdXY stage1 stage2
+sudo make DEST=/dev/sdXY stage1 stage2
 ```
 Replace `X` with the target drive letter, `Y` with the target partition number,
 `stage1` with the first stage option you choose and `stage2` with one of the
@@ -61,13 +62,13 @@ make stage1 stage2
 Replace `stage1` with the first stage option you choose and `stage2` with one of
 the second stage options.
 
-On Windows, run BOOTICE then select the target drive under the Destination Disk
-section, select Process MBR then Restore MBR, select `stage1.bin` under this
-project folder where `stage1` is the first stage option you have previously
-chosen. Once finished, go back to the BOOTICE's main window and select Process
-PBR, select the target partition under the Destination Partition section, select
-Restore PBR, select `stage2.bin` under this project folder where `stage2` is the
-second stage option you have previously chosen.
+On Windows, run BOOTICE as administrator then select the target drive under the
+Destination Disk section, select Process MBR then Restore MBR, select
+`stage1.bin` under this project folder where `stage1` is the first stage option
+you have previously chosen. Once finished, go back to the BOOTICE's main window
+and select Process PBR, select the target partition under the Destination
+Partition section, select Restore PBR, select `stage2.bin` under this project
+folder where `stage2` is the second stage option you have previously chosen.
 
 # Technical Information
 
