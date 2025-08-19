@@ -25,21 +25,49 @@ there, but this is not enough with the popularity of GPT and UEFI slowly
 replacing the mature but limited legacy boot and MBR. Therefore, this project also provides
 the MBR code that also works with GPT to get the best of both worlds.
 
-There are two files provided for the first stage:
-- plb1.s - This code looks for a GPT partition with attribute bit 2 set ("Legacy
+There are two options provided for the first stage:
+- plb1 - This code looks for a GPT partition with attribute bit 2 set ("Legacy
   BIOS bootable"), or find an active MBR partition. This is recommended for
   single-boot setups.
-- plb1ss.s - This code looks for the first GPT partition with valid PBR
+- plb1ss - This code looks for the first GPT partition with valid PBR
   signature regardless whether the attribute bit 2 is set, or the first MBR
   partition with valid PBR signature regardless which one has the active flag.
   This is to work around Windows that wants its partition to be active at all
   times, or if you are unable to set the attribute bit for some reason.
 
-There are two files provided for the second stage a.k.a. the Linux bootloader:
-- plb2boot.s - This code looks for files named `vmlinuz`, `initrd.img` and
+There are two options provided for the second stage a.k.a. the Linux bootloader:
+- plb2boot - This code looks for files named `vmlinuz`, `initrd.img` and
   `cmdline.txt` in the parent directory, suitable for `/boot` partition.
-- plb2esp.s - This code looks for files named `vmlinuz`, `initrd.img` and
+- plb2esp - This code looks for files named `vmlinuz`, `initrd.img` and
   `cmdline.txt` in the `EFI` directory, suitable for hybrid legacy and EFI boot.
+
+### Automatic Install
+
+Make sure you have `make`, `nasm` and `dd`. Run this command to install:
+```bash
+make DEST=/dev/sdXY stage1 stage2
+```
+Replace `X` with the target drive letter, `Y` with the target partition number,
+`stage1` with the first stage option you choose and `stage2` with one of the
+second stage options. This assumes your host is Linux and the target drive has
+sane MBR or GPT scheme, otherwise remove the `DEST` argument for manual install.
+
+### Manual Install
+
+Make sure you have `make` and `nasm`. Run this command to compile:
+```bash
+make stage1 stage2
+```
+Replace `stage1` with the first stage option you choose and `stage2` with one of
+the second stage options.
+
+On Windows, run BOOTICE then select the target drive under the Destination Disk
+section, select Process MBR then Restore MBR, select `stage1.bin` under this
+project folder where `stage1` is the first stage option you have previously
+chosen. Once finished, go back to the BOOTICE's main window and select Process
+PBR, select the target partition under the Destination Partition section, select
+Restore PBR, select `stage2.bin` under this project folder where `stage2` is the
+second stage option you have previously chosen.
 
 # Technical Information
 
@@ -54,8 +82,8 @@ left the drive number in `DL`.
 - [Syslinux](https://www.syslinux.org) and
   [ArchWiki](https://wiki.archlinux.org/title/Syslinux#GUID_partition_table)
   for making me learn that GPT attribute bit 2 is a thing.
-- [doslinux](https://github.com/haileys/doslinux) for jumping between 16-bit and
-  Linux mechanism.
+- [doslinux](https://github.com/haileys/doslinux) as another reference for
+  jumping between 16-bit and Linux mechanism.
 
 # License
 
